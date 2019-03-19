@@ -44,9 +44,9 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     return output
 
 
-def main():
-    nsamples = 3
-    length = -1
+def main(phrase=None):
+    nsamples = 1
+    length = 20
     temperature = 1
     top_k = 0
     unconditional = False
@@ -70,29 +70,32 @@ def main():
     elif length > model.config.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % model.config.n_ctx)
 
-    while not unconditional:
-        if not unconditional:
+    if phrase is None:
+        raw_text = input("Model prompt >>> ")
+        while not raw_text:
+            print('Prompt should not be empty!')
             raw_text = input("Model prompt >>> ")
-            while not raw_text:
-                print('Prompt should not be empty!')
-                raw_text = input("Model prompt >>> ")
-            context_tokens = enc.encode(raw_text)
-        generated = 0
-        for _ in range(nsamples // batch_size):
-            out = sample_sequence(
-                model=model, length=length,
-                context=context_tokens if not unconditional else None,
-                start_token=enc.encoder['<|endoftext|>'] if unconditional else None,
-                batch_size=batch_size,
-                temperature=temperature, top_k=top_k, device=device
-            )
-            out = out[:, len(context_tokens):].tolist()
-            for i in range(batch_size):
-                generated += 1
-                text = enc.decode(out[i])
-                print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
-                print(text)
-        print("=" * 80)
+    else:
+        raw_text = phrase
+    context_tokens = enc.encode(raw_text)
+    generated = 0
+    results = []
+    for _ in range(nsamples // batch_size):
+        out = sample_sequence(
+            model=model, length=length,
+            context=context_tokens if not unconditional else None,
+            start_token=enc.encoder['<|endoftext|>'] if unconditional else None,
+            batch_size=batch_size,
+            temperature=temperature, top_k=top_k, device=device
+        )
+        out = out[:, len(context_tokens):].tolist()
 
+        for i in range(batch_size):
+            generated += 1
+            text = enc.decode(out[i])
+            print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
+            print(text)
+            results.append(text)
 
-main()
+    print("=" * 80)
+    return results

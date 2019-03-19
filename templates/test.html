@@ -1,0 +1,10 @@
+<!doctype html>
+<title>Hello from the FUTURE</title>
+{% if phrase %}
+  <h1>phrase: {{ phrase }}</h1>
+  <h3>{% for result in results %}
+    generated: {{ result }}
+    {% endfor %} </h3>
+{% else %}
+  <h1>Hello, World!</h1>
+{% endif %}
