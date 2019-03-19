@@ -1,11 +1,11 @@
 from flask import Flask
 from flask import request
 from flask import render_template
-from flask import jsonify
 
 from main import main
 
 app = Flask(__name__)
+
 
 @app.route('/hello')
 def hello_world():
@@ -14,10 +14,8 @@ def hello_world():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    phrase = request.args.get('phrase')
-    if phrase:
-        generated = main(phrase)
     return render_template("index.html")
+
 
 @app.route('/api/generate', methods=['GET', 'POST'])
 def generate():
