@@ -178,4 +178,13 @@ textarea:focus, input:focus{
         left: 32px;
         width: calc(100% - 64px);
     }
+
+    .signature {
+        bottom: 3em;
+        right: 32px;
+        width: calc(100% - 64px);
+        font-size: 10px;
+        line-height: 10px;
+
+    }
 }
