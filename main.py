@@ -30,6 +30,7 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     prev = context
     output = context
     past = None
+    
     with torch.no_grad():
         for i in trange(length):
             logits, past = model(prev, past=past)
@@ -50,7 +51,7 @@ def main(phrase=None):
     temperature = 1
     top_k = 0
     unconditional = False
-
+    print("hello")
     batch_size = 1
     assert nsamples % batch_size == 0
 
@@ -69,6 +70,8 @@ def main(phrase=None):
         length = model.config.n_ctx // 2
     elif length > model.config.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % model.config.n_ctx)
+
+    print(length)
 
     if phrase is None:
         raw_text = input("Model prompt >>> ")

@@ -33,6 +33,7 @@
             margin: 0;
             padding: 0;
             font-size: 16px;
+            background-color: #F7FBFD;
         }
 
         .ql-editor, section {
@@ -41,9 +42,24 @@
             padding: 0;
         }
 
+        p {
+            font-size: 16px;
+            line-height: 32px;
+        }
+
+        #content {
+            font-size: 16px;
+            line-height: 32px;
+        }
+
+        .contentholder {
+            flex-flow: row wrap;
+        }
+
         section {
             width: 50%;
-            padding: 4em;
+            max-width: 50%;
+            padding: 8em;
             position: relative;
         }
 
@@ -54,15 +70,15 @@
         .name {
             color: #0F4359;
             position: absolute;
-            top: 1.5em;
-            left: 1.5em;
+            top: 4em;
+            left: 8em;
             font-weight: bold;
         }
 
         #refresh {
             position: fixed;
-            top: 1.5em;
-            right: 1.5em;
+            top: 4em;
+            right: 8em;
             fill: #0F4359;
         }
 
@@ -83,7 +99,9 @@
         <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
     </svg>
-    <div id="content" class="faded"></div>
+    <div id="ai-content" class="contentholder">
+        <span id="content" class="faded"></div>
+    </div>
 </section>
 <script>
     function getDuetText() {
@@ -109,7 +127,7 @@
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getDuetText()})
             }).done(data => {
-                $(`<span>${data.response}</span>`).insertAfter($('#ai-pane').children().last())
+                $(`<span id="content">${data.response}</span>`).insertAfter($('#ai-content').children().last())
             }).fail(() => {
                 alert("bugggzz")
             })
