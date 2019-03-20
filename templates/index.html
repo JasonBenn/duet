@@ -14,7 +14,7 @@
 <body>
 <section>
     <div class="name user">
-        <input type="text" placeholder="Name Me" />
+        <input type="text" placeholder="Two heads are better than one" />
     </div>
     <div id="editor"></div>
     <div class="actions">
@@ -37,14 +37,11 @@
     element.setAttribute("href", "./styles.css");
     document.getElementsByTagName("head")[0].appendChild(element);
 
-
-
-
     $(document).ready(() => {
         const colorGrey = "rgba(15, 67, 89, 0.33)";
         const colorBlack = "rgb(15, 67, 89)";
 
-        var quill = new Quill('#editor', { placeholder: 'Anything to say?' });
+        var quill = new Quill('#editor', { placeholder: 'Especially when one head is a multi-headed self-attending neural net' });
         window.quill = quill
 
         var lastPosition = -1;
