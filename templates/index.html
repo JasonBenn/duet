@@ -14,7 +14,7 @@
 <body>
 <section>
     <div class="name user">
-        <input type="text" placeholder="Two heads are better than one" />
+        <input id="editor-title" type="text" />
     </div>
     <div id="editor"></div>
     <div class="actions">
@@ -41,7 +41,17 @@
         const colorGrey = "rgba(15, 67, 89, 0.33)";
         const colorBlack = "rgb(15, 67, 89)";
 
-        var quill = new Quill('#editor', { placeholder: 'Especially when one head is a multi-headed self-attending neural net' });
+        const copyOptions = [{
+            title: "Two heads are better than one",
+            text: "Especially when one head is a self-attending neural net"
+        }, {
+            title: "AI is here to help",
+            text: "Remember, the key to happiness is low expectations"
+        }]
+
+        const copy = copyOptions[Math.floor(Math.random() * copyOptions.length)]
+        $('#editor-title').attr('placeholder', copy.title)
+        var quill = new Quill('#editor', { placeholder: copy.text });
         window.quill = quill
 
         var lastPosition = -1;
