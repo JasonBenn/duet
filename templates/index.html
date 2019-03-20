@@ -91,7 +91,7 @@
         .actions {
             display: flex;
             flex-direction: row;
-            margin-top: 4em;
+            margin-top: calc(4em - 20px);
         }
 
         .actionPic {
@@ -114,7 +114,9 @@
             border-radius: 8px;
             border: 2px solid #0F4359;
             transition: 0.2s all;
-            margin: 8px;
+            margin-right: 16px;
+            margin-top: 8px;
+            margin-bottom: 8px;
             cursor: default;
         }
 
@@ -124,6 +126,9 @@
             box-shadow: 0px 8px 16px rgba(15,67,89,.33);
         }
 
+        .hideButton {
+            display: none;
+        }
 
     </style>
 </head>
@@ -139,7 +144,7 @@
         <span id="content" class="faded"></div>
     </div>
     <div class="actions">
-        <div class="button">
+        <div id="accept" class="button hideButton">
             <span class="actionPic">✅</span>
             <span class="actionLabel">ACCEPT</span>
         </div>
@@ -147,7 +152,7 @@
             <span class="actionPic">👀</span>
             <span class="actionLabel">MOAR</span>
         </div>
-        <div id="clear" class="button">
+        <div id="clear" class="button hideButton">
             <span class="actionPic">❌</span>
             <span class="actionLabel">CLEAR</span>
         </div>
@@ -178,9 +183,12 @@
                 type: "POST", dataType: "json", data: JSON.stringify({text: getDuetText()})
             }).done(data => {
                 $(`<span id="ai-content" >${data.response}</span>`).insertAfter($('#duet-content').children().last())
+                $('#accept').removeClass("hideButton")
+                $('#clear').removeClass("hideButton")
             }).fail(() => {
                 alert("bugggzz")
             })
+            
         });
 
         $('#clear').click(event => {
@@ -188,6 +196,21 @@
                 $(this).remove();
                 $('#content').text(getHumanText());
             });
+            $('#accept').addClass("hideButton")
+            $('#clear').addClass("hideButton")
+        })
+
+        $('#accept').click(event => {
+            quill.setContents([
+                { insert: getDuetText() }
+            ]);
+            $('*[id*=ai-content]:visible').each(function() {
+                $(this).remove();
+                $('#content').text(getHumanText());
+            });
+            $('#content').text(getHumanText())
+            $('#accept').addClass("hideButton")
+            $('#clear').addClass("hideButton")
         })
 
     })
