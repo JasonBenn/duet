@@ -26,6 +26,9 @@ html, .ql-editor {
 html, body {
     height: 100vh;
     box-sizing: border-box;
+    min-width: 20em;
+    max-width: 90vw;
+    margin: 0 auto;
 }
 
 body {
@@ -67,7 +70,7 @@ p {
 section {
     width: 100%;
     max-width: 100%;
-    padding: 8em;
+    padding: 9vw;
     padding-top: 12em;
     position: relative;
 }
@@ -80,7 +83,8 @@ section + section {
     color: #0F4359;
     position: absolute;
     top: 6em;
-    left: 8em;
+    left: 9vw;
+    min-width: 82vw;
     font-weight: bold;
     width: calc(100% - 16em);
 }
@@ -135,7 +139,7 @@ section + section {
     display: none;
 }
 
-input {
+textarea {
     width: 100%;
     background: none;
     border: none;
@@ -145,10 +149,10 @@ input {
     font-weight: 500;
 }
 
-input::placeholder {
+textarea::placeholder {
     color: rgba(15,67,89,.33);
 }
 
-textarea:focus, input:focus{
+textarea:focus{
     outline: none;
 }

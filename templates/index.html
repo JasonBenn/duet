@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Duet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
     <script
             src="//code.jquery.com/jquery-3.3.1.min.js"
@@ -14,7 +16,7 @@
 <body>
 <section>
     <div class="name user">
-        <input id="editor-title" type="text" />
+        <textarea id="editor-title" wrap="soft"></textarea>
     </div>
     <div id="editor"></div>
     <div class="actions">
