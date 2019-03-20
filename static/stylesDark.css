@@ -1,0 +1,154 @@
+@import url('https://rsms.me/inter/inter.css');
+
+html, .ql-editor {
+    font-family: 'Inter', sans-serif;
+}
+
+.ql-container {
+    height: auto;
+}
+
+.ql-editor.ql-blank::before {
+    color: rgba(247,251,253,.33);
+    content: attr(data-placeholder);
+    font-style: normal;
+    left: 2px;
+    top: 4px;
+    position: absolute;
+}
+
+@supports (font-variation-settings: normal) {
+    html {
+        font-family: 'Inter var', sans-serif;
+    }
+}
+
+html, body {
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    background-color: rgb(15,67,89);
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ql-editor, section {
+    color: rgb(247,251,253);
+    font-size: 16px;
+    padding: 0;
+}
+
+p {
+    font-size: 16px;
+    line-height: 32px;
+}
+
+#content {
+    font-size: 16px;
+    line-height: 32px;
+}
+
+#ai-content {
+    font-size: 16px;
+    line-height: 32px;
+}
+
+.contentholder {
+    flex-flow: row wrap;
+}
+
+section {
+    width: 100%;
+    max-width: 100%;
+    padding: 8em;
+    padding-top: 12em;
+    position: relative;
+}
+
+section + section {
+    border-left: 2px solid rgb(247,251,253);
+}
+
+.name {
+    color: #0F4359;
+    position: absolute;
+    top: 6em;
+    left: 8em;
+    font-weight: bold;
+    width: calc(100% - 16em);
+}
+
+#refresh {
+    fill: #0F4359;
+}
+
+.faded {
+    color: rgba(247,251,253, .33);
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    margin-top: calc(4em - 20px);
+}
+
+.actionPic {
+    padding-left: 6px;
+}
+
+.actionLabel {
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 500;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px;
+    border-radius: 8px;
+    border: 2px solid rgb(247,251,253);
+    transition: 0.2s all;
+    margin-right: 16px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    cursor: default;
+}
+
+.button:hover {
+    margin-top: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0px 8px 16px rgba(247,251,253, .33);
+}
+
+.hideButton {
+    display: none;
+}
+
+input {
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: 32px;
+    font-family: 'Inter var', sans-serif;
+    color: rgb(247,251,253);
+    font-weight: 500;
+}
+
+input::placeholder {
+    color: rgb(247,251,253);
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}

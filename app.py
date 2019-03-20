@@ -2,11 +2,12 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from flask import jsonify
+from flask import send_from_directory
 
 
 from main import main
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 
 @app.route('/hello')
@@ -18,6 +19,9 @@ def hello_world():
 def index():
     return render_template("index.html")
 
+@app.route('/static/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
 
 @app.route('/api/generate', methods=['POST'])
 def generate():
