@@ -152,3 +152,20 @@ input::placeholder {
 textarea:focus, input:focus{
     outline: none;
 }
+
+@media only screen and (max-width: 480px) {
+    body {
+        width: 100%;
+    }
+
+    section {
+        padding: 32px;
+        padding-top: 7em;
+    }
+
+    .name {
+        top: 3em;
+        left: 32px;
+        width: calc(100% - 64px);
+    }
+}
