@@ -51,7 +51,6 @@ def main(phrase=None):
     temperature = 1
     top_k = 0
     unconditional = False
-    print("hello")
     batch_size = 1
     assert nsamples % batch_size == 0
 
@@ -70,8 +69,6 @@ def main(phrase=None):
         length = model.config.n_ctx // 2
     elif length > model.config.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % model.config.n_ctx)
-
-    print(length)
 
     if phrase is None:
         raw_text = input("Model prompt >>> ")
