@@ -21,6 +21,14 @@
             height: auto;
         }
 
+        .ql-editor.ql-blank::before {
+            color: rgba(15,67,89,.33);
+            content: attr(data-placeholder);
+            left: 0;
+            top: 4px;
+            position: absolute;
+        }
+
         @supports (font-variation-settings: normal) {
             html {
                 font-family: 'Inter var', sans-serif;
@@ -38,6 +46,9 @@
             padding: 0;
             font-size: 16px;
             background-color: #F7FBFD;
+            width: 60vw;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .ql-editor, section {
@@ -66,9 +77,10 @@
         }
 
         section {
-            width: 50%;
-            max-width: 50%;
+            width: 100%;
+            max-width: 100%;
             padding: 8em;
+            padding-top: 12em;
             position: relative;
         }
 
@@ -79,9 +91,10 @@
         .name {
             color: #0F4359;
             position: absolute;
-            top: 4em;
+            top: 6em;
             left: 8em;
             font-weight: bold;
+            width: calc(100% - 16em);
         }
 
         #refresh {
@@ -135,6 +148,7 @@
         }
 
         input {
+            width: 100%;
             background: none;
             border: none;
             font-size: 32px;
@@ -180,7 +194,7 @@
         const colorGrey = "rgba(15, 67, 89, 0.33)";
         const colorBlack = "rgb(15, 67, 89)";
 
-        var quill = new Quill('#editor');
+        var quill = new Quill('#editor', { placeholder: 'Anything to say?' });
         window.quill = quill
 
         var lastPosition = -1;
