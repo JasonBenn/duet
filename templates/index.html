@@ -17,6 +17,10 @@
             font-family: 'Inter', sans-serif;
         }
 
+        .ql-container {
+            height: auto;
+        }
+
         @supports (font-variation-settings: normal) {
             html {
                 font-family: 'Inter var', sans-serif;
@@ -130,88 +134,93 @@
             display: none;
         }
 
+        input {
+            background: none;
+            border: none;
+            font-size: 32px;
+            font-family: 'Inter var', sans-serif;
+            color: rgb(15,67,89);
+            font-weight: 500;
+        }
+
+        input::placeholder {
+            color: rgba(15,67,89,.33);
+        }
+
+        textarea:focus, input:focus{
+            outline: none;
+        }
+
     </style>
 </head>
 <body>
 <section>
-    <div class="name user">You</div>
-    <div id="editor"></div>
-</section>
-
-<section id="ai-pane">
-    <div class="name duet">Duet</div>
-    <div id="duet-content" class="contentholder">
-        <span id="content" class="faded"></div>
+    <div class="name user">
+        <input type="text" placeholder="Name Me" />
     </div>
+    <div id="editor"></div>
     <div class="actions">
-        <div id="accept" class="button hideButton">
-            <span class="actionPic">✅</span>
-            <span class="actionLabel">ACCEPT</span>
-        </div>
         <div id="refresh" class="button" >
             <span class="actionPic">👀</span>
             <span class="actionLabel">MOAR</span>
         </div>
-        <div id="clear" class="button hideButton">
-            <span class="actionPic">❌</span>
-            <span class="actionLabel">CLEAR</span>
-        </div>
     </div>
 </section>
-<script>
-    function getDuetText() {
-        return $('#ai-pane').text().replace(/\s+/g, ' ')
-    }
 
-    function getHumanText() {
+<script>
+
+    function getText() {
         return quill.getText().split('\n').join(' ')
     }
 
 
+
+
     $(document).ready(() => {
+        const colorGrey = "rgba(15, 67, 89, 0.33)";
+        const colorBlack = "rgb(15, 67, 89)";
+
         var quill = new Quill('#editor');
         window.quill = quill
 
-        // When you type in You, write it, faded, to Duet.
-        $('#editor').keypress(event => {
-            $('#content').text(getHumanText())
-        })
+        var lastPosition = -1;
+
+        function checkColor() {
+        if (quill.getFormat() && quill.getFormat().color === colorGrey) {
+                quill.format('color', colorBlack);
+            }
+        }
+
 
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
             $.ajax('/api/generate', {
-                type: "POST", dataType: "json", data: JSON.stringify({text: getDuetText()})
+                type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
-                $(`<span id="ai-content" >${data.response}</span>`).insertAfter($('#duet-content').children().last())
-                $('#accept').removeClass("hideButton")
-                $('#clear').removeClass("hideButton")
+                quill.insertText(lastPosition, data.response, {
+                    color: colorGrey 
+                })
             }).fail(() => {
                 alert("bugggzz")
             })
             
         });
 
-        $('#clear').click(event => {
-            $('*[id*=ai-content]:visible').each(function() {
-                $(this).remove();
-                $('#content').text(getHumanText());
-            });
-            $('#accept').addClass("hideButton")
-            $('#clear').addClass("hideButton")
-        })
 
-        $('#accept').click(event => {
-            quill.setContents([
-                { insert: getDuetText() }
-            ]);
-            $('*[id*=ai-content]:visible').each(function() {
-                $(this).remove();
-                $('#content').text(getHumanText());
-            });
-            $('#content').text(getHumanText())
-            $('#accept').addClass("hideButton")
-            $('#clear').addClass("hideButton")
-        })
+        quill.on('selection-change', function(range, oldRange, source) {
+            if (range) {
+                if (range.length == 0) {
+                    lastPosition = range.index;
+                    checkColor();
+                } else {
+                    var text = quill.getText(range.index, range.length);
+                    lastPosition = range.index;
+                    checkColor();
+                }
+            } else {
+                //not in the editor
+            }
+        });
 
     })
 </script>
