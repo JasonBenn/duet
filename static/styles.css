@@ -173,6 +173,15 @@ textarea:focus, input:focus{
         padding-top: 7em;
     }
 
+    p {
+        font-size: 18px;
+        line-height: 36px;
+    }
+
+    .ql-editor.ql-blank::before {
+        line-height: 32px;
+    }
+
     .name {
         top: 3em;
         left: 32px;
@@ -186,5 +195,25 @@ textarea:focus, input:focus{
         font-size: 10px;
         line-height: 10px;
 
+    }
+
+    .actionPic {
+        padding-left: 6px;
+        font-size: 24px;
+        
+    }
+    
+    .actionLabel {
+        font-size: 18px;
+        line-height: 18px;
+    }
+    
+    .button {
+        margin-top: 24px;
+        width: 128px;
+        height: 42px;
+        display: flex; 
+        flex-direction: row;
+        justify-content: center;
     }
 }
