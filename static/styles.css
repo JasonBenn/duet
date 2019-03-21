@@ -182,6 +182,10 @@ textarea:focus, input:focus{
         line-height: 32px;
     }
 
+    input {
+        font-size: 22px;
+    }
+
     .name {
         top: 3em;
         left: 32px;
