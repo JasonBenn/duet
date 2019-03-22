@@ -229,3 +229,23 @@ textarea:focus, input:focus{
         margin-bottom: calc(6em - 32px);
     }
 }
+
+@media only screen and (max-width: 372px) {
+    body {
+        width: 100%;
+    }
+
+    section {
+        padding: 16px;
+        padding-top: 6em;
+    }
+
+    .name {
+        left: 16px;
+        width: calc(100% - 32px);
+    }
+
+    .signature {
+        margin-bottom: 2em;
+    }
+}
