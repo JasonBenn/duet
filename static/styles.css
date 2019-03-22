@@ -159,7 +159,7 @@ textarea:focus, input:focus{
 
 .signature {
     color: rgba(15,67,89,.33);
-    text-align: right;
+    text-align: left;
     width: calc(100%);
     font-size: 12px;
     line-height: 16px;
