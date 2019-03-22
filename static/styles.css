@@ -70,6 +70,9 @@ section {
     padding: 8em;
     padding-top: 12em;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 section + section {
@@ -87,6 +90,7 @@ section + section {
 
 #refresh {
     fill: #0F4359;
+    margin-bottom: 4em;
 }
 
 .faded {
@@ -155,12 +159,10 @@ textarea:focus, input:focus{
 
 .signature {
     color: rgba(15,67,89,.33);
-    position: absolute;
-    bottom: 6em;
-    right: 8em;
     text-align: right;
-    width: calc(100% - 16em);
+    width: calc(100%);
     font-size: 12px;
+    line-height: 16px;
 }
 
 @media only screen and (max-width: 480px) {
@@ -184,6 +186,7 @@ textarea:focus, input:focus{
 
     input {
         font-size: 22px;
+        font-weight: 600;
     }
 
     .name {
@@ -219,5 +222,10 @@ textarea:focus, input:focus{
         display: flex; 
         flex-direction: row;
         justify-content: center;
+    }
+
+    .signature {
+        width: 100%;
+        margin-bottom: calc(6em - 32px);
     }
 }
