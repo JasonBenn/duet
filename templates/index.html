@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>Duet</title>
-    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="http://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script
-            src="//code.jquery.com/jquery-3.3.1.min.js"
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 
-    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>
 <section>
@@ -22,7 +22,7 @@
         <div class="actions">
             <div id="refresh" class="button" >
                 <span class="actionPic">👀</span>
-                <span class="actionLabel">MOAR</span>
+                <span class="actionLabel">Moar</span>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
     var element = document.createElement("link");
     element.setAttribute("rel", "stylesheet");
     element.setAttribute("type", "text/css");
-    element.setAttribute("href", "./styles.css");
+    element.setAttribute("href", "../static/styles.css");
     document.getElementsByTagName("head")[0].appendChild(element);
 
     $(document).ready(() => {
@@ -46,11 +46,8 @@
         const colorBlack = "rgb(15, 67, 89)";
 
         const copyOptions = [{
-            title: "Two heads are better than one",
-            text: "Especially when one head is a self-attending neural net"
-        }, {
-            title: "AI is here to help",
-            text: "Remember, the key to happiness is low expectations"
+            title: "Give me a title",
+            text: "The cure to writer's block is a healthy dose of entropy"
         }]
 
         const copy = copyOptions[Math.floor(Math.random() * copyOptions.length)]
