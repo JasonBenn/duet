@@ -14,10 +14,10 @@ For faster startup time, we include the model file in the container image.
 cp -r ~/.pytorch_pretrained_bert/ cache/
 # Build docker image
 docker build . -t aiduet/web
+# Test locally
+docker run --rm -it -p 8080:8080 aiduet/web
 # One time login
-heroku container:login
-# Push to Heroku
-heroku container:push --app aiduet
-heroku container:release web
-heroku open
+gcloud auth login
+# Deploy to AppEngine
+yes | gcloud app deploy
 ```
