@@ -1,4 +1,4 @@
 runtime: custom
 env: flex
 resources:
-  memory_gb: 1
+  memory_gb: 3
