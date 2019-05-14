@@ -25,3 +25,4 @@ torch==1.0.1.post2
 tqdm==4.31.1
 urllib3
 Werkzeug==0.14.1
+websockets==7.0
