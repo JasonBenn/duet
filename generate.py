@@ -30,7 +30,7 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     prev = context
     output = context
     past = None
-    
+
     with torch.no_grad():
         for i in trange(length):
             logits, past = model(prev, past=past)
@@ -93,9 +93,5 @@ def main(phrase=None):
         for i in range(batch_size):
             generated += 1
             text = enc.decode(out[i])
-            print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
-            print(text)
             results.append(text)
-
-    print("=" * 80)
     return results
