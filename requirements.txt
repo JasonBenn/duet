@@ -2,6 +2,7 @@ blis==0.2.4
 cymem==2.0.2
 docutils==0.14
 Flask==1.0.2
+Flask-SocketIO==3.3.2
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10

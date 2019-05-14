@@ -1,3 +1,5 @@
+from flask_socketio import send, emit
+from flask_socketio import SocketIO
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -8,6 +10,7 @@ from flask import send_from_directory
 from main import main
 
 app = Flask(__name__, static_url_path='')
+socketio = SocketIO(app)
 
 
 @app.route('/hello')
@@ -35,8 +38,17 @@ def generate():
         generated = "NOP U NEED TO SEND PHRASE - I AM SMART BUT NOT A MIND READER"
     return jsonify({"response": "".join(generated)})
 
+
+@socketio.on('client_connected')
+def handle_client_connect_event(json):
+    print('received json: {0}'.format(str(json)))
+    for text in "hi i am a robot".split(' '):
+        print('emitting...', text)
+        emit('token', text)
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
     # can be configured by adding an `entrypoint` to app.yaml.
     app.run(host='127.0.0.1', port=8080, debug=True)
+5
