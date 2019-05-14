@@ -121,16 +121,26 @@ section + section {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+
     padding: 12px;
     padding-left: 20px;
     padding-right: 20px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
     border-radius: 8px;
     background-color: rgba(27,189,205,1);
     transition: 0.2s all;
-    margin-right: 16px;
-    margin-top: 8px;
-    margin-bottom: 8px;
     cursor: default;
+    width: 108px;
+    height: 32px;
+}
+
+.buttonContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .button:hover {
@@ -165,6 +175,33 @@ textarea:focus, input:focus{
     width: calc(100%);
     font-size: 12px;
     line-height: 16px;
+}
+
+
+.marquee {
+  overflow: hidden;
+  position: relative;
+  width: 108px;
+  background-color: rgba(27,189,205,.33);
+}
+
+.marquee div {
+  width: 200%;
+  height: 30px;
+
+  position: absolute;
+  overflow: hidden;
+
+  animation: marquee 10s linear infinite;
+}
+
+.marquee span {
+  float: left;
+}
+
+@keyframes marquee {
+  0% { left: 0; }
+  100% { left: -90%; }
 }
 
 @media only screen and (max-width: 480px) {

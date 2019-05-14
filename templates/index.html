@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>Duet</title>
-    <script src="http://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -66,12 +66,14 @@
 
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
+            $( 'div.button' ).replaceWith( '<div id="refresh" class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>' );
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
                 quill.insertText(lastPosition, data.response, {
                     color: colorGrey 
                 })
+                $( 'div.button' ).replaceWith( '<div id="refresh" class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
             }).fail(() => {
                 alert("bugggzz")
             })
