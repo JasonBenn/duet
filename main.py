@@ -7,12 +7,13 @@ from flask import render_template
 from flask import jsonify
 from flask import send_from_directory
 
-
-from generate import main
+import generate
 
 app = Flask(__name__, static_url_path='')
+app.logger.info('Loading model')
 socketio = SocketIO(app)
-
+enc, model = generate.init()
+app.logger.info('Loaded model')
 
 @app.route('/hello')
 def hello_world():
@@ -30,21 +31,18 @@ def send_js(path):
 
 
 @app.route('/api/generate', methods=['POST'])
-def generate():
+def generate_():
     context = request.get_json(force=True)
     phrase = context.get('text')
-    if phrase:
-        generated = main(phrase)
-    else:
-        generated = "NOP U NEED TO SEND PHRASE - I AM SMART BUT NOT A MIND READER"
+    generated = generate.main(model, enc, phrase)
     return jsonify({"response": "".join(generated)})
 
 
 @socketio.on('client_connected')
 def handle_client_connect_event(json):
-    print('received json: {0}'.format(str(json)))
+    app.logger.info('received json: {0}'.format(str(json)))
     for text in "hi i am a robot".split(' '):
-        print('emitting...', text)
+        app.logger.info('emitting... %s', text)
         emit('token', text)
 
 if __name__ == '__main__':

@@ -45,15 +45,7 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     return output
 
 
-def main(phrase=None):
-    nsamples = 1
-    length = 20
-    temperature = 1
-    top_k = 0
-    unconditional = False
-    batch_size = 1
-    assert nsamples % batch_size == 0
-
+def init():
     seed = 42
     np.random.seed(seed)
     torch.random.manual_seed(seed)
@@ -64,27 +56,30 @@ def main(phrase=None):
     model = GPT2LMHeadModel.from_pretrained('gpt2')
     model.to(device)
     model.eval()
+    return enc, model
+
+def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    nsamples = 1
+    length = 20
+    temperature = .8
+    top_k = 0
+    batch_size = 1
+    assert nsamples % batch_size == 0
 
     if length == -1:
         length = model.config.n_ctx // 2
     elif length > model.config.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % model.config.n_ctx)
 
-    if phrase is None:
-        raw_text = input("Model prompt >>> ")
-        while not raw_text:
-            print('Prompt should not be empty!')
-            raw_text = input("Model prompt >>> ")
-    else:
-        raw_text = phrase
-    context_tokens = enc.encode(raw_text)
+    context_tokens = enc.encode(phrase) if phrase else [enc.encoder['<|endoftext|>']]
     generated = 0
     results = []
     for _ in range(nsamples // batch_size):
         out = sample_sequence(
             model=model, length=length,
-            context=context_tokens if not unconditional else None,
-            start_token=enc.encoder['<|endoftext|>'] if unconditional else None,
+            context=context_tokens,
+            start_token=None,
             batch_size=batch_size,
             temperature=temperature, top_k=top_k, device=device
         )
@@ -95,3 +90,7 @@ def main(phrase=None):
             text = enc.decode(out[i])
             results.append(text)
     return results
+
+if __name__ == '__main__':
+    enc_, model_ = init()
+    print(main(model_, enc_, None))
