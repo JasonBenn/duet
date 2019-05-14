@@ -19,9 +19,11 @@ def hello_world():
 def index():
     return render_template("index.html")
 
+
 @app.route('/static/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
+
 
 @app.route('/api/generate', methods=['POST'])
 def generate():
