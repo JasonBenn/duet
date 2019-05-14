@@ -2,3 +2,5 @@ runtime: custom
 env: flex
 resources:
   memory_gb: 3
+network:
+  session_affinity: true
