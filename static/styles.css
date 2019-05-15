@@ -91,7 +91,6 @@ section + section {
 
 #refresh {
     fill: #0F1339;
-    margin-bottom: 4em;
 }
 
 .faded {
@@ -103,6 +102,7 @@ section + section {
     flex-direction: row;
     justify-content: flex-end;
     margin-top: calc(4em - 12px);
+    margin-bottom: 4em;
 }
 
 .actionPic {
@@ -232,6 +232,12 @@ textarea:focus, input:focus{
 @keyframes marquee {
   0% { left: 0; }
   100% { left: -90%; }
+}
+
+.rightAlign {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 @media only screen and (max-width: 480px) {
