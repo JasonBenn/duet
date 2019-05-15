@@ -240,6 +240,10 @@ textarea:focus, input:focus{
     justify-content: flex-end;
 }
 
+.tallLineHeight {
+    line-height: 24px;
+}
+
 @media only screen and (max-width: 480px) {
     body {
         width: 100%;
