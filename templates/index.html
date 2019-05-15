@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <p class="signature">Made with ❤️ by Jason Benn, Austin Hou, Christina Kim, and Ben Mann</p>
+    <p class="signature">Made with ❤️ by Jason Benn, Austin Hou, Christina Kim, and Ben Mann <br /><a href="https://aiwriter.typeform.com/to/lh2l0F">Feedback?</a></p>
 </section>
 
 <script>
@@ -70,7 +70,6 @@
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
             $( 'div.button' ).replaceWith(buttonLoadHTML);
-            console.log(lastPosition)
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
@@ -92,7 +91,6 @@
             let range = args[0]
             let oldRange = args[1]
             let source = args[2]
-            console.log(range)
             if (range) {
                 if (range.length == 0) {
                     lastPosition = range.index;

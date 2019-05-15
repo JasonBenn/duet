@@ -50,6 +50,7 @@ p {
     line-height: 32px;
 }
 
+
 #content {
     font-size: 16px;
     line-height: 32px;
@@ -200,6 +201,10 @@ textarea:focus, input:focus{
     width: calc(100%);
     font-size: 12px;
     line-height: 16px;
+}
+
+.signature a {
+    color: rgba(15,67,89,.33);
 }
 
 
