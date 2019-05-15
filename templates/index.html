@@ -45,6 +45,8 @@
     $(document).ready(() => {
         const colorGrey = "rgba(15, 67, 89, 0.33)";
         const colorBlack = "rgb(15, 67, 89)";
+        const buttonLoadHTML = '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>';
+        const buttonMoarHTML = '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>';
 
         const copyOptions = [{
             title: "Give me a title",
@@ -67,23 +69,30 @@
 
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
-            $( 'div.button' ).replaceWith( '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>' );
+            $( 'div.button' ).replaceWith(buttonLoadHTML);
+            console.log(lastPosition)
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
                 quill.insertText(lastPosition, data.response, {
                     color: colorGrey
                 })
-                $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
+                $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(() => {
                 alert("bugggzz")
-                $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
+                $( 'div.button' ).replaceWith(buttonMoarHTML);
             })
 
         });
 
-
-        quill.on('selection-change', function(range, oldRange, source) {
+        quill.on('editor-change', function(eventName, ...args) {
+        if (eventName === 'text-change') {
+            // args[0] will be delta
+        } else if (eventName === 'selection-change') {
+            let range = args[0]
+            let oldRange = args[1]
+            let source = args[2]
+            console.log(range)
             if (range) {
                 if (range.length == 0) {
                     lastPosition = range.index;
@@ -96,6 +105,7 @@
             } else {
                 //not in the editor
             }
+        }
         });
 
         const socket = io();
