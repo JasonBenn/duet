@@ -38,7 +38,7 @@
             <input id="editor-title" type="text" />
         </div>
         <div id="editor"></div>
-        <div class="actions hideButton">
+        <div class="actions">
             <div>
                 <div id="refresh"><div class="button" >
                     <span class="actionLabel">👀 Moar</span>
@@ -107,6 +107,7 @@
                 quill.insertText(lastPosition, data.response, {
                     color: colorGrey
                 })
+                lastPosition = lastPosition + data.response.length;
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(() => {
                 alert("bugggzz")
@@ -117,8 +118,7 @@
 
         quill.on('editor-change', function(eventName, ...args) {
         if (eventName === 'text-change') {
-            // args[0] will be delta
-            $("div.hideButton").removeClass("hideButton");
+            //$("div.hideButton").removeClass("hideButton");
         } else if (eventName === 'selection-change') {
             let range = args[0]
             let oldRange = args[1]
