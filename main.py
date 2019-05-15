@@ -19,6 +19,13 @@ app.logger.info('Loaded model')
 def hello_world():
     return 'Hello, World!'
 
+@app.route('/readiness_check')
+def ready():
+    return 'OK'
+
+@app.route('/liveness_check')
+def live():
+    return 'OK'
 
 @app.route('/', methods=['GET'])
 def index():

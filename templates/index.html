@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <p class="signature">Made with ❤️ by Jason Benn, Austin Hou, and Christina Kim</p>
+    <p class="signature">Made with ❤️ by Jason Benn, Austin Hou, Christina Kim, and Ben Mann</p>
 </section>
 
 <script>
@@ -72,14 +72,14 @@
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
                 quill.insertText(lastPosition, data.response, {
-                    color: colorGrey 
+                    color: colorGrey
                 })
                 $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
             }).fail(() => {
                 alert("bugggzz")
                 $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
             })
-            
+
         });
 
 

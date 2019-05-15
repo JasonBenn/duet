@@ -20,4 +20,9 @@ docker run --rm -it -p 8080:8080 aiduet/web
 gcloud auth login
 # Deploy to AppEngine
 yes | gcloud app deploy
+
+## For faster deploy, build container separately:
+docker build . -t us.gcr.io/duet-0/appengine
+docker push us.gcr.io/duet-0/appengine
+gcloud app deploy --image-url us.gcr.io/duet-0/appengine
 ```
