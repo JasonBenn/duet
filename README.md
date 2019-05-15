@@ -1,7 +1,6 @@
-`pip install -r requirements.txt`
-
 Run locally with
 ```sh
+pip install -r requirements.txt
 python main.py
 ```
 

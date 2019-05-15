@@ -5,6 +5,37 @@ from pytorch_pretrained_bert import GPT2LMHeadModel, GPT2Tokenizer
 from tqdm import trange
 
 
+def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')):
+    """ Filter a distribution of logits using top-k and/or nucleus (top-p) filtering
+
+    https://gist.github.com/thomwolf/1a5a29f6962089e871b94cbd09daf317
+
+        Args:
+            logits: logits distribution shape (..., vocabulary size)
+            top_k >0: keep only top k tokens with highest probability (top-k filtering).
+            top_p >0.0: keep the top tokens with cumulative probability >= top_p (nucleus filtering).
+    """
+    top_k = min(top_k, logits.size(-1))  # Safety check
+    if top_k > 0:
+        # Remove all tokens with a probability less than the last token of the top-k
+        indices_to_remove = logits < torch.topk(logits, top_k)[0][..., -1, None]
+        logits[indices_to_remove] = filter_value
+
+    if top_p > 0.0:
+        sorted_logits, sorted_indices = torch.sort(logits, descending=True)
+        cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
+
+        # Remove tokens with cumulative probability above the threshold
+        sorted_indices_to_remove = cumulative_probs >= top_p
+        # Shift the indices to the right to keep also the first token above the threshold
+        sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
+        sorted_indices_to_remove[..., 0] = 0
+
+        indices_to_remove = torch.zeros_like(logits, dtype=torch.uint8).scatter_(
+            dim=-1, index=sorted_indices, src=sorted_indices_to_remove )
+        logits[indices_to_remove] = filter_value
+    return logits
+
 def top_k_logits(logits, k):
     """
     Masks everything but the k top entries as -infinity (1e10).
@@ -20,7 +51,7 @@ def top_k_logits(logits, k):
 
 
 def sample_sequence(model, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0,
-                    device='cuda', sample=True):
+                    device='cuda', top_p=0):
     if start_token is None:
         assert context is not None, 'Specify exactly one of start_token and context!'
         context = torch.tensor(context, device=device, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
@@ -35,21 +66,18 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
         for i in trange(length):
             logits, past = model(prev, past=past)
             logits = logits[:, -1, :] / temperature
-            logits = top_k_logits(logits, k=top_k)
-            log_probs = F.softmax(logits, dim=-1)
-            if sample:
-                prev = torch.multinomial(log_probs, num_samples=1)
-            else:
-                _, prev = torch.topk(log_probs, k=1, dim=-1)
+            logits = top_k_top_p_filtering(logits, top_p=top_p, top_k=top_k)
+            probs = F.softmax(logits, dim=-1)
+            prev = torch.multinomial(probs, num_samples=1)
             output = torch.cat((output, prev), dim=1)
     return output
 
 
 def init():
-    seed = 42
-    np.random.seed(seed)
-    torch.random.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
+    #seed = 42
+    #np.random.seed(seed)
+    #torch.random.manual_seed(seed)
+    #torch.cuda.manual_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     enc = GPT2Tokenizer.from_pretrained('gpt2')
@@ -63,7 +91,8 @@ def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
     nsamples = 1
     length = 20
     temperature = .8
-    top_k = 0
+    top_k = 40
+    top_p = 0
     batch_size = 1
     assert nsamples % batch_size == 0
 
@@ -81,7 +110,8 @@ def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
             context=context_tokens,
             start_token=None,
             batch_size=batch_size,
-            temperature=temperature, top_k=top_k, device=device
+            temperature=temperature, top_k=top_k, device=device,
+            top_p=top_p
         )
         out = out[:, len(context_tokens):].tolist()
 
