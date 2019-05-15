@@ -21,8 +21,9 @@
         </div>
         <div id="editor"></div>
         <div class="actions">
-            <div id="refresh" class="button" >
+            <div id="refresh"><div class="button" >
                 <span class="actionLabel">👀 Moar</span>
+                </div>
             </div>
         </div>
     </div>
@@ -66,17 +67,17 @@
 
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
-            $( 'div.button' ).replaceWith( '<div id="refresh" class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>' );
+            $( 'div.button' ).replaceWith( '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>' );
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
                 quill.insertText(lastPosition, data.response, {
                     color: colorGrey 
                 })
-                $( 'div.button' ).replaceWith( '<div id="refresh" class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
+                $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
             }).fail(() => {
                 alert("bugggzz")
-                $( 'div.button' ).replaceWith( '<div id="refresh" class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
+                $( 'div.button' ).replaceWith( '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>' );
             })
             
         });
