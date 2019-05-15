@@ -26,13 +26,14 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')
         cumulative_probs = torch.cumsum(F.softmax(sorted_logits, dim=-1), dim=-1)
 
         # Remove tokens with cumulative probability above the threshold
-        sorted_indices_to_remove = cumulative_probs > top_p
+        sorted_indices_to_remove = cumulative_probs >= top_p
         # Shift the indices to the right to keep also the first token above the threshold
         sorted_indices_to_remove[..., 1:] = sorted_indices_to_remove[..., :-1].clone()
         sorted_indices_to_remove[..., 0] = 0
 
         indices_to_remove = torch.zeros_like(logits, dtype=torch.uint8).scatter_(
             dim=-1, index=sorted_indices, src=sorted_indices_to_remove )
+        logits[indices_to_remove] = filter_value
     return logits
 
 def top_k_logits(logits, k):
@@ -50,7 +51,7 @@ def top_k_logits(logits, k):
 
 
 def sample_sequence(model, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0,
-                    device='cuda', sample=True, top_p=0):
+                    device='cuda', top_p=0):
     if start_token is None:
         assert context is not None, 'Specify exactly one of start_token and context!'
         context = torch.tensor(context, device=device, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
@@ -66,20 +67,17 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
             logits, past = model(prev, past=past)
             logits = logits[:, -1, :] / temperature
             logits = top_k_top_p_filtering(logits, top_p=top_p, top_k=top_k)
-            log_probs = F.softmax(logits, dim=-1)
-            if sample:
-                prev = torch.multinomial(log_probs, num_samples=1)
-            else:
-                _, prev = torch.topk(log_probs, k=1, dim=-1)
+            probs = F.softmax(logits, dim=-1)
+            prev = torch.multinomial(probs, num_samples=1)
             output = torch.cat((output, prev), dim=1)
     return output
 
 
 def init():
-    seed = 42
-    np.random.seed(seed)
-    torch.random.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
+    #seed = 42
+    #np.random.seed(seed)
+    #torch.random.manual_seed(seed)
+    #torch.cuda.manual_seed(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     enc = GPT2Tokenizer.from_pretrained('gpt2')
