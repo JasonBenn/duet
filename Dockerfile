@@ -12,7 +12,7 @@ COPY static /app/static
 COPY templates /app/templates
 COPY *py /app/
 WORKDIR /app
-#ENTRYPOINT ["python"]
-#CMD ["main.py"]
-EXPOSE 8080
-CMD ["gunicorn"  , "-b", "0.0.0.0:8080", "main:app", "--timeout", "300"]
+ENTRYPOINT ["python"]
+CMD ["main.py"]
+#EXPOSE 8080
+#CMD ["gunicorn"  , "-b", "0.0.0.0:8080", "main:app", "--timeout", "300"]
