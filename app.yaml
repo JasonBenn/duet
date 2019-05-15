@@ -5,10 +5,12 @@ resources:
   memory_gb: 6
 network:
   session_affinity: true
-liveness_check:
-  path: "/liveness_check"
-readiness_check:
-  path: "/readiness_check"
-  check_interval_sec: 10
-  failure_threshold: 10
-  app_start_timeout_sec: 1500
+health_check:
+  enable_health_check: false
+# liveness_check:
+#   path: "/liveness_check"
+# readiness_check:
+#   path: "/readiness_check"
+#   check_interval_sec: 10
+#   failure_threshold: 10
+#   app_start_timeout_sec: 1500
