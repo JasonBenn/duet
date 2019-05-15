@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <!-- Primary Meta Tags -->
-<title>Duet - The AI Cure to Writer's Block</title>
-<meta name="title" content="Duet - The AI Cure to Writer's Block">
-<meta name="description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
+    <title>Duet - The AI Cure to Writer's Block</title>
+    <meta name="title" content="Duet - The AI Cure to Writer's Block">
+    <meta name="description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://metatags.io/">
-<meta property="og:title" content="Duet - The AI Cure to Writer's Block">
-<meta property="og:description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
-<meta property="og:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duet-0.appspot.com/">
+    <meta property="og:title" content="Duet - The AI Cure to Writer's Block">
+    <meta property="og:description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
+    <meta property="og:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://metatags.io/">
-<meta property="twitter:title" content="Duet - The AI Cure to Writer's Block">
-<meta property="twitter:description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
-<meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://duet-0.appspot.com/">
+    <meta property="twitter:title" content="Duet - The AI Cure to Writer's Block">
+    <meta property="twitter:description" content="Add a dose of entropy to your creative writing with the full power of GPT-2">
+    <meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
@@ -38,18 +38,18 @@
             <input id="editor-title" type="text" />
         </div>
         <div id="editor"></div>
-        <div class="actions">
+        <div class="actions hideButton">
             <div>
-            <div id="refresh"><div class="button" >
-                <span class="actionLabel">👀 Moar</span>
+                <div id="refresh"><div class="button" >
+                    <span class="actionLabel">👀 Moar</span>
+                    </div>
+                </div>
+                <div class="a2a_kit a2a_kit_size_32 a2a_default_style rightAlign">
+                    <a class="a2a_button_facebook"></a>
+                    <a class="a2a_button_twitter"></a>
+                    <a class="a2a_button_email"></a>
                 </div>
             </div>
-            <div class="a2a_kit a2a_kit_size_32 a2a_default_style rightAlign">
-                <a class="a2a_button_facebook"></a>
-                <a class="a2a_button_twitter"></a>
-                <a class="a2a_button_email"></a>
-            </div>
-        </div>
         </div>
     </div>
     <script async src="https://static.addtoany.com/menu/page.js"></script>
@@ -118,6 +118,7 @@
         quill.on('editor-change', function(eventName, ...args) {
         if (eventName === 'text-change') {
             // args[0] will be delta
+            $("div.hideButton").removeClass("hideButton");
         } else if (eventName === 'selection-change') {
             let range = args[0]
             let oldRange = args[1]
