@@ -7,6 +7,9 @@ network:
   session_affinity: true
 health_check:
   enable_health_check: false
+handlers:
+- url: /static
+  static_dir: static
 # liveness_check:
 #   path: "/liveness_check"
 # readiness_check:
