@@ -112,7 +112,7 @@
                 type: "POST", dataType: "json", data: JSON.stringify({text: sendText.trim(), model: urlParams.get('model')})
             }).done(data => {
                 let newText = data.response;
-                newText = newText.replace(/[^\x00-\xFF]/g, "");
+                newText = newText.replace(/[^\x00-\xFF]/g, ""); //remove non-unicode
                 
                 let lastOld = getText()[getText().length-1]
                 let firstNew = newText.slice(-1)
@@ -125,7 +125,7 @@
                     color: colorGrey
                 })
 
-                lastPosition = lastPosition + newText.length;
+                lastPosition = lastPosition + newText.length; // only relevant if addOnlyAtEnd is false
 
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(e => {
@@ -144,7 +144,7 @@
                 let oldRange = args[1]
                 let source = args[2]
                 if (range) {
-                    if (range.length == 0) {
+                    if (range.length == 0) { 
                         lastPosition = range.index;
                         checkColor();
                     } else {
