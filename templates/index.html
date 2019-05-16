@@ -115,10 +115,12 @@
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
                 
                 //make sure spaces are correct; ignore punctuation
-                let lastOld = getText()[getText().length-1]
-                let firstNew = newText.slice(-1)
+                let lastOld = getText().slice(-2,-1)
+                let firstNew = newText.slice(0,1)
+                console.log(lastOld)
+                console.log(firstNew)
                 if (lastOld !== " " && firstNew !== " ") { //no spaces
-                    if (punctuation.includes(firstNew)) {
+                    if (punctuations.includes(firstNew)) {
                         //pass
                     }
                     else {
@@ -127,11 +129,15 @@
                 }
                 else {
                     if (lastOld === " " && firstNew === " ") { //both spaces
+                        console.log("both")
                         newText = newText.trim(); //delete 1 space
                     }
                     else { //only 1 space
                         if (punctuations.includes(firstNew)) {
                             quill.deleteText(getText().length-1, 1); //delete extra space before punctuation
+                        }
+                        if (firstNew === " " && newText.slice(1,2) === " ") { //two leading spaces
+                            newText = " " + newText.trim(); //trim to 1 space
                         }
                     }
                 }
