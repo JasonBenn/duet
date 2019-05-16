@@ -106,10 +106,14 @@
             }).done(data => {
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
+                newText = " " + newText.trim();
+
                 quill.insertText(lastPosition, newText, {
                     color: colorGrey
                 })
+
                 lastPosition = lastPosition + newText.length;
+                
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(() => {
                 alert("bugggzz")
