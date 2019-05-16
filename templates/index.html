@@ -130,7 +130,7 @@
                         newText = newText.trim(); //delete 1 space
                     }
                     else { //only 1 space
-                        if (punctuation.includes(firstNew)) {
+                        if (punctuations.includes(firstNew)) {
                             quill.deleteText(getText().length-1, 1); //delete extra space before punctuation
                         }
                     }
