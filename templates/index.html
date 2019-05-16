@@ -105,8 +105,9 @@
             if (sendText.length <= 1) {
                 sendText = $( "#editor-title" ).text();
             }
+            var urlParams = new URLSearchParams(window.location.search);
             $.ajax('/api/generate', {
-                type: "POST", dataType: "json", data: JSON.stringify({text: sendText})
+                type: "POST", dataType: "json", data: JSON.stringify({text: sendText, model: urlParams.get('model')})
             }).done(data => {
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");

@@ -17,7 +17,7 @@ from pytorch_pretrained_bert import GPT2Tokenizer
 
 def init():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    cache_dir = 'cachde/'
+    cache_dir = 'cache/'
     # Load the best saved model.
     with open(os.path.join(cache_dir, 'model-best.pt'), 'rb') as f:
         sys.path.insert(0,f'{os.getcwd()}/transformer_xl/')
@@ -31,7 +31,7 @@ def init():
     model.eval()
     return model
 
-def main(model, tokenizer, context, length=20, batch_size=1, top_p=.9, temperature=1, top_k=0):
+def main(model, tokenizer, context, length=20, batch_size=1, top_p=.9, temperature=.8, top_k=0):
     max_context = 384
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     NL = tokenizer.encode('\n')
@@ -49,8 +49,7 @@ def main(model, tokenizer, context, length=20, batch_size=1, top_p=.9, temperatu
 
     for i in range(length):
         ## Grab a sample from the last frame, append to result list, append to `data`
-        # TODO: using mems breaks generation. Find a way to fix?
-        pred_hid, mems_ = predict(model, data[-max_context:], mems)
+        pred_hid, mems = predict(model, data[-max_context:] if i == 0 else data[-1:], mems)
         softmax = hidden_to_softmax(model, pred_hid[-1], top_k=top_k, temperature=temperature, top_p=top_p)
 
         new_sample = torch.multinomial(softmax, num_samples=1).unsqueeze(-1).squeeze(2)
