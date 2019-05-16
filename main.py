@@ -17,6 +17,7 @@ enc, model = generate.init()
 try:
     wiki_model = generate_wiki.init()
 except:
+    wiki_model = None
     app.logger.warning('Wiki model not found')
 app.logger.info('Loaded model')
 
@@ -46,7 +47,7 @@ def send_js(path):
 def generate_():
     context = request.get_json(force=True)
     phrase = context.get('text', '')
-    if context.get('model') == 'wiki':
+    if context.get('model') == 'wiki' and wiki_model:
         generated = generate_wiki.main(wiki_model, enc, phrase)
     else:
         generated = generate.main(model, enc, phrase)
