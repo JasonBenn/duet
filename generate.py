@@ -48,18 +48,16 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     past = None
 
     count = 0
-
     with torch.no_grad():
-        while True:
+        while count < length:
             logits, past = model(prev, past=past)
             logits = logits[:, -1, :] / temperature
             logits = top_k_top_p_filtering(logits, top_p=top_p, top_k=top_k)
             probs = F.softmax(logits, dim=-1)
             prev = torch.multinomial(probs, num_samples=1)
-            
             output = torch.cat((output, prev), dim=1)
             count += 1
-            if prev in stop_token or count > length:
+            if prev in stop_token:
                 break
     return output
 
