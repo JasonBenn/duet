@@ -7,14 +7,9 @@ network:
   session_affinity: true
 health_check:
   enable_health_check: false
+automatic_scaling:
+  min_num_instances: 1
 handlers:
 - url: /static
   static_dir: static
   expiration: '10s'
-# liveness_check:
-#   path: "/liveness_check"
-# readiness_check:
-#   path: "/readiness_check"
-#   check_interval_sec: 10
-#   failure_threshold: 10
-#   app_start_timeout_sec: 1500
