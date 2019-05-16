@@ -104,10 +104,12 @@
             $.ajax('/api/generate', {
                 type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
             }).done(data => {
-                quill.insertText(lastPosition, data.response, {
+                let newText = data.response;
+                newText = newText.replace(/[^\x00-\xFF]/g, "");
+                quill.insertText(lastPosition, newText, {
                     color: colorGrey
                 })
-                lastPosition = lastPosition + data.response.length;
+                lastPosition = lastPosition + newText.length;
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(() => {
                 alert("bugggzz")
