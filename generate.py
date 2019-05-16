@@ -58,6 +58,7 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
             prev = torch.multinomial(probs, num_samples=1)
             
             output = torch.cat((output, prev), dim=1)
+            count += 1
             if prev in stop_token or count > length:
                 break
     return output

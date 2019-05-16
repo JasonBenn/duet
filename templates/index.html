@@ -78,6 +78,9 @@
         const colorBlack = "rgb(15, 67, 89)";
         const buttonLoadHTML = '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>';
         const buttonMoarHTML = '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>';
+        const punctuations = ".,;:'?!";
+
+        const addOnlyAtEnd = true;
 
         const copyOptions = [{
             title: "Give me a title",
@@ -107,13 +110,34 @@
             }
             var urlParams = new URLSearchParams(window.location.search);
             $.ajax('/api/generate', {
-                type: "POST", dataType: "json", data: JSON.stringify({text: sendText, model: urlParams.get('model')})
+                type: "POST", dataType: "json", data: JSON.stringify({text: sendText.trim(), model: urlParams.get('model')})
             }).done(data => {
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
-                newText = " " + newText.trim();
+                
+                //make sure spaces are correct; ignore punctuation
+                let lastOld = getText()[getText().length-1]
+                let firstNew = newText.slice(-1)
+                if (lastOld !== " " && firstNew !== " ") { //no spaces
+                    if (punctuation.includes(firstNew)) {
+                        //pass
+                    }
+                    else {
+                        newText = " " + newText.trim(); //add 1 space
+                    }
+                }
+                else {
+                    if (lastOld === " " && firstNew === " ") { //both spaces
+                        newText = newText.trim(); //delete 1 space
+                    }
+                    else { //only 1 space
+                        if (punctuations.includes(firstNew)) {
+                            quill.deleteText(getText().length-1, 1); //delete extra space before punctuation
+                        }
+                    }
+                }
 
-                quill.insertText(lastPosition, newText, {
+                quill.insertText(addOnlyAtEnd ? getText().length - 1 : lastPosition, newText, {
                     color: colorGrey
                 })
 
@@ -128,25 +152,25 @@
         });
 
         quill.on('editor-change', function(eventName, ...args) {
-        if (eventName === 'text-change') {
-            //$("div.hideButton").removeClass("hideButton");
-        } else if (eventName === 'selection-change') {
-            let range = args[0]
-            let oldRange = args[1]
-            let source = args[2]
-            if (range) {
-                if (range.length == 0) {
-                    lastPosition = range.index;
-                    checkColor();
+            if (eventName === 'text-change') {
+                //$("div.hideButton").removeClass("hideButton");
+            } else if (eventName === 'selection-change') {
+                let range = args[0]
+                let oldRange = args[1]
+                let source = args[2]
+                if (range) {
+                    if (range.length == 0) {
+                        lastPosition = range.index;
+                        checkColor();
+                    } else {
+                        var text = quill.getText(range.index, range.length);
+                        lastPosition = range.index;
+                        checkColor();
+                    }
                 } else {
-                    var text = quill.getText(range.index, range.length);
-                    lastPosition = range.index;
-                    checkColor();
+                    //not in the editor
                 }
-            } else {
-                //not in the editor
             }
-        }
         });
 
         const socket = io();
