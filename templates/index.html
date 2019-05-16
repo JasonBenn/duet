@@ -79,6 +79,8 @@
         const buttonLoadHTML = '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>';
         const buttonMoarHTML = '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>';
 
+        const addOnlyAtEnd = true;
+
         const copyOptions = [{
             title: "Give me a title",
             text: "The cure to writer's block is a healthy dose of entropy"
@@ -106,13 +108,13 @@
                 sendText = $( "#editor-title" ).text();
             }
             $.ajax('/api/generate', {
-                type: "POST", dataType: "json", data: JSON.stringify({text: sendText})
+                type: "POST", dataType: "json", data: JSON.stringify({text: sendText.trim()})
             }).done(data => {
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
                 newText = " " + newText.trim();
 
-                quill.insertText(lastPosition, newText, {
+                quill.insertText(addOnlyAtEnd ? getText().length - 1 : lastPosition, newText, {
                     color: colorGrey
                 })
 
@@ -127,25 +129,25 @@
         });
 
         quill.on('editor-change', function(eventName, ...args) {
-        if (eventName === 'text-change') {
-            //$("div.hideButton").removeClass("hideButton");
-        } else if (eventName === 'selection-change') {
-            let range = args[0]
-            let oldRange = args[1]
-            let source = args[2]
-            if (range) {
-                if (range.length == 0) {
-                    lastPosition = range.index;
-                    checkColor();
+            if (eventName === 'text-change') {
+                //$("div.hideButton").removeClass("hideButton");
+            } else if (eventName === 'selection-change') {
+                let range = args[0]
+                let oldRange = args[1]
+                let source = args[2]
+                if (range) {
+                    if (range.length == 0) {
+                        lastPosition = range.index;
+                        checkColor();
+                    } else {
+                        var text = quill.getText(range.index, range.length);
+                        lastPosition = range.index;
+                        checkColor();
+                    }
                 } else {
-                    var text = quill.getText(range.index, range.length);
-                    lastPosition = range.index;
-                    checkColor();
+                    //not in the editor
                 }
-            } else {
-                //not in the editor
             }
-        }
         });
 
         const socket = io();
