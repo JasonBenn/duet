@@ -50,7 +50,7 @@ def generate_():
         generated = generate_wiki.main(wiki_model, enc, phrase)
     else:
         generated = generate.main(model, enc, phrase)
-    return jsonify({"response": "".join(generated)})
+    return jsonify({"response": generated})
 
 
 @socketio.on('client_connected')

@@ -93,24 +93,18 @@ def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
 
     context_tokens = enc.encode(phrase) if phrase else [enc.encoder['<|endoftext|>']]
     generated = 0
-    results = []
-    for _ in range(nsamples // batch_size):
-        out = sample_sequence(
-            model=model, length=length,
-            context=context_tokens,
-            start_token=None,
-            batch_size=batch_size,
-            temperature=temperature, top_k=top_k, device=device,
-            top_p=top_p,
-            stop_token=stop_token
-        )
-        out = out[:, len(context_tokens):].tolist()
+    out = sample_sequence(
+        model=model, length=length,
+        context=context_tokens,
+        start_token=None,
+        batch_size=batch_size,
+        temperature=temperature, top_k=top_k, device=device,
+        top_p=top_p,
+        stop_token=stop_token
+    )
+    out = out[:, len(context_tokens):].tolist()
+    return enc.decode(out[0])
 
-        for i in range(batch_size):
-            generated += 1
-            text = enc.decode(out[i])
-            results.append(text)
-    return results
 
 if __name__ == '__main__':
     enc_, model_ = init()

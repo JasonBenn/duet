@@ -78,7 +78,6 @@
         const colorBlack = "rgb(15, 67, 89)";
         const buttonLoadHTML = '<div class="button marquee" ><div class="buttonContent"><span class="actionPic">🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔🤔</span></div></div>';
         const buttonMoarHTML = '<div class="button" ><span class="actionPic">👀</span><span class="actionLabel">Moar</span></div>';
-        const punctuations = ".,;:'?!";
 
         const addOnlyAtEnd = true;
 
@@ -115,26 +114,11 @@
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
                 
-                //make sure spaces are correct; ignore punctuation
                 let lastOld = getText()[getText().length-1]
                 let firstNew = newText.slice(-1)
-                if (lastOld !== " " && firstNew !== " ") { //no spaces
-                    if (punctuation.includes(firstNew)) {
-                        //pass
-                    }
-                    else {
-                        newText = " " + newText.trim(); //add 1 space
-                    }
-                }
-                else {
-                    if (lastOld === " " && firstNew === " ") { //both spaces
-                        newText = newText.trim(); //delete 1 space
-                    }
-                    else { //only 1 space
-                        if (punctuations.includes(firstNew)) {
-                            quill.deleteText(getText().length-1, 1); //delete extra space before punctuation
-                        }
-                    }
+                // Text may have been trimmed before sending to server.
+                if (lastOld === " " && firstNew === " ") { //both spaces
+                    newText = newText.trim(); //delete 1 space
                 }
 
                 quill.insertText(addOnlyAtEnd ? getText().length - 1 : lastPosition, newText, {
@@ -144,8 +128,9 @@
                 lastPosition = lastPosition + newText.length;
 
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
-            }).fail(() => {
+            }).fail(e => {
                 alert("bugggzz")
+                console.error(e)
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             })
 
