@@ -101,8 +101,12 @@
         // When you press the refresh button, POST to the backend.
         $('#refresh').click(event => {
             $( 'div.button' ).replaceWith(buttonLoadHTML);
+            let sendText = getText();
+            if (sendText.length <= 1) {
+                sendText = $( "#editor-title" ).text();
+            }
             $.ajax('/api/generate', {
-                type: "POST", dataType: "json", data: JSON.stringify({text: getText()})
+                type: "POST", dataType: "json", data: JSON.stringify({text: sendText})
             }).done(data => {
                 let newText = data.response;
                 newText = newText.replace(/[^\x00-\xFF]/g, "");
@@ -113,7 +117,7 @@
                 })
 
                 lastPosition = lastPosition + newText.length;
-                
+
                 $( 'div.button' ).replaceWith(buttonMoarHTML);
             }).fail(() => {
                 alert("bugggzz")
