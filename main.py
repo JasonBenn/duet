@@ -8,11 +8,16 @@ from flask import jsonify
 from flask import send_from_directory
 
 import generate
+import generate_wiki
 
 app = Flask(__name__, static_url_path='')
 app.logger.info('Loading model')
 socketio = SocketIO(app)
 enc, model = generate.init()
+try:
+    wiki_model = generate_wiki.init()
+except:
+    app.logger.warning('Wiki model not found')
 app.logger.info('Loaded model')
 
 @app.route('/hello')
@@ -40,8 +45,11 @@ def send_js(path):
 @app.route('/api/generate', methods=['POST'])
 def generate_():
     context = request.get_json(force=True)
-    phrase = context.get('text')
-    generated = generate.main(model, enc, phrase)
+    phrase = context.get('text', '')
+    if context.get('model') == 'wiki':
+        generated = generate_wiki.main(wiki_model, enc, phrase)
+    else:
+        generated = generate.main(model, enc, phrase)
     return jsonify({"response": "".join(generated)})
 
 

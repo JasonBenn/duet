@@ -2,7 +2,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from pytorch_pretrained_bert import GPT2LMHeadModel, GPT2Tokenizer
-from tqdm import trange
 import sys
 
 def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')):
@@ -36,22 +35,8 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')
         logits[indices_to_remove] = filter_value
     return logits
 
-def top_k_logits(logits, k):
-    """
-    Masks everything but the k top entries as -infinity (1e10).
-    Used to mask logits such that e^-infinity -> 0 won't contribute to the
-    sum of the denominator.
-    """
-    if k == 0:
-        return logits
-    else:
-        values = torch.topk(logits, k)[0]
-        batch_mins = values[:, -1].view(-1, 1).expand_as(logits)
-        return torch.where(logits < batch_mins, torch.ones_like(logits) * -1e10, logits)
-
-
 def sample_sequence(model, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0,
-                    device='cuda', top_p=0):
+                    device='cuda', top_p=0, stop_token=[]):
     if start_token is None:
         assert context is not None, 'Specify exactly one of start_token and context!'
         context = torch.tensor(context, device=device, dtype=torch.long).unsqueeze(0).repeat(batch_size, 1)
@@ -74,7 +59,7 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
             
             output = torch.cat((output, prev), dim=1)
             count += 1
-            if prev == 13 or count > length:
+            if prev in stop_token or count > length:
                 break
     return output
 
@@ -96,10 +81,11 @@ def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     nsamples = 1
     length = 40
-    temperature = .8
-    top_k = 40
-    top_p = 0
+    temperature = 1
+    top_k = 0
+    top_p = 0.9
     batch_size = 1
+    stop_token = [enc.encoder[x] for x in ('<|endoftext|>', '.', '?', '!')]
     assert nsamples % batch_size == 0
 
     if length == -1:
@@ -117,7 +103,8 @@ def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
             start_token=None,
             batch_size=batch_size,
             temperature=temperature, top_k=top_k, device=device,
-            top_p=top_p
+            top_p=top_p,
+            stop_token=stop_token
         )
         out = out[:, len(context_tokens):].tolist()
 
