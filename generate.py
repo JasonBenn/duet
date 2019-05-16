@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 from pytorch_pretrained_bert import GPT2LMHeadModel, GPT2Tokenizer
 from tqdm import trange
-
+import sys
 
 def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')):
     """ Filter a distribution of logits using top-k and/or nucleus (top-p) filtering
@@ -62,14 +62,21 @@ def sample_sequence(model, length, start_token=None, batch_size=None, context=No
     output = context
     past = None
 
+    count = 0
+
     with torch.no_grad():
-        for i in trange(length):
+        while True:
             logits, past = model(prev, past=past)
             logits = logits[:, -1, :] / temperature
             logits = top_k_top_p_filtering(logits, top_p=top_p, top_k=top_k)
             probs = F.softmax(logits, dim=-1)
             prev = torch.multinomial(probs, num_samples=1)
+            
             output = torch.cat((output, prev), dim=1)
+            print(output, file=sys.stderr)
+            print(prev, file=sys.stderr)
+            if prev == 13 or count > length:
+                break
     return output
 
 
@@ -89,7 +96,7 @@ def init():
 def main(model: GPT2LMHeadModel, enc: GPT2Tokenizer, phrase: str = ''):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     nsamples = 1
-    length = 20
+    length = 40
     temperature = .8
     top_k = 40
     top_p = 0
