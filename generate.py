@@ -35,20 +35,6 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')
         logits[indices_to_remove] = filter_value
     return logits
 
-def top_k_logits(logits, k):
-    """
-    Masks everything but the k top entries as -infinity (1e10).
-    Used to mask logits such that e^-infinity -> 0 won't contribute to the
-    sum of the denominator.
-    """
-    if k == 0:
-        return logits
-    else:
-        values = torch.topk(logits, k)[0]
-        batch_mins = values[:, -1].view(-1, 1).expand_as(logits)
-        return torch.where(logits < batch_mins, torch.ones_like(logits) * -1e10, logits)
-
-
 def sample_sequence(model, length, start_token=None, batch_size=None, context=None, temperature=1, top_k=0,
                     device='cuda', top_p=0, stop_token=[]):
     if start_token is None:

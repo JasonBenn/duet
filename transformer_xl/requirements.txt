@@ -1,0 +1,20 @@
+torch==1.1.0
+pytz
+numpy
+ncluster
+tqdm
+pytorch_pretrained_bert
+tensorboardX
+tensorflow  # needed for tensorboardX
+pytorch-lamb
+# TODO: remove git repo when master is pushed
+git+https://github.com/8enmann/pytorch-pretrained-BERT@patch-2
+#pytorch-pretrained-bert
+portalocker
+
+# ncluster subdependencies
+boto3
+paramiko
+portpicker
+tzlocal
+attrdict
