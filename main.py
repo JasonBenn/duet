@@ -1,14 +1,16 @@
+import logging
 import os
-from flask_socketio import send, emit
-from flask_socketio import SocketIO
-from flask import Flask
-from flask import request
-from flask import render_template
-from flask import jsonify
-from flask import send_from_directory
+
+from flask import Flask, jsonify, render_template, request, send_from_directory
+from flask.logging import default_handler
+from flask_socketio import SocketIO, emit, send
 
 import generate
 import generate_wiki
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('waitress')
+logger.addHandler(default_handler)
 
 app = Flask(__name__, static_url_path='')
 app.logger.info('Loading model')

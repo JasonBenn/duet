@@ -1,7 +1,7 @@
 runtime: custom
 env: flex
 resources:
-  cpu: 1
+  cpu: 2
   memory_gb: 6
 #network:
 #  session_affinity: true
