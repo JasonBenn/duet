@@ -11,6 +11,8 @@ For faster startup time, we include the model file in the container image.
 ```sh
 # Copy model cache
 cp -r ~/.pytorch_pretrained_bert/ cache/
+# Download wiki model
+wget -O cache/model-best.pt https://s3.amazonaws.com/yaroslavvb2/runs/transformerxl-wiki/model.pt
 # Build docker image
 docker build . -t aiduet/web
 # Test locally

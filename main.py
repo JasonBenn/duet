@@ -16,9 +16,9 @@ app.logger.info('Loading model')
 enc, model = generate.init()
 try:
     wiki_model = generate_wiki.init()
-except:
+except Exception as e:
     wiki_model = None
-    app.logger.warning('Wiki model not found')
+    app.logger.warning('Wiki model not found', e)
 app.logger.info('Loaded model')
 
 @app.route('/hello')

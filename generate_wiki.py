@@ -17,7 +17,7 @@ from pytorch_pretrained_bert import GPT2Tokenizer
 
 def init():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    cache_dir = 'cache/'
+    cache_dir = os.environ.get('PYTORCH_PRETRAINED_BERT_CACHE', 'cache/')
     # Load the best saved model.
     with open(os.path.join(cache_dir, 'model-best.pt'), 'rb') as f:
         sys.path.insert(0,f'{os.getcwd()}/transformer_xl/')
