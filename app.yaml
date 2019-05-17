@@ -3,8 +3,8 @@ env: flex
 resources:
   cpu: 1
   memory_gb: 6
-network:
-  session_affinity: true
+#network:
+#  session_affinity: true
 health_check:
   enable_health_check: false
 automatic_scaling:

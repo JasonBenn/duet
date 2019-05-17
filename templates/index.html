@@ -158,13 +158,13 @@
             }
         });
 
-        const socket = io();
-        socket.on('token', (event) => {
-            console.log(event);
-        });
-        socket.on('connect', () => {
-            socket.emit('client_connected', {data: 'New client!'});
-        });
+        // const socket = io();
+        // socket.on('token', (event) => {
+        //     console.log(event);
+        // });
+        // socket.on('connect', () => {
+        //     socket.emit('client_connected', {data: 'New client!'});
+        // });
         // socket.on('disconnect', () => {
         //     console.log('disconnected');
         // });

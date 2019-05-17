@@ -12,7 +12,7 @@ import generate_wiki
 
 app = Flask(__name__, static_url_path='')
 app.logger.info('Loading model')
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 enc, model = generate.init()
 try:
     wiki_model = generate_wiki.init()
@@ -54,12 +54,12 @@ def generate_():
     return jsonify({"response": generated})
 
 
-@socketio.on('client_connected')
-def handle_client_connect_event(json):
-    app.logger.info('received json: {0}'.format(str(json)))
-    for text in "hi i am a robot".split(' '):
-        app.logger.info('emitting... %s', text)
-        emit('token', text)
+# @socketio.on('client_connected')
+# def handle_client_connect_event(json):
+#     app.logger.info('received json: {0}'.format(str(json)))
+#     for text in "hi i am a robot".split(' '):
+#         app.logger.info('emitting... %s', text)
+#         emit('token', text)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.environ.get('PORT', 8080), debug=False)
