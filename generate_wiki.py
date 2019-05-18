@@ -31,7 +31,7 @@ def init():
     model.eval()
     return model
 
-def main(model, tokenizer, context, length=20, batch_size=1, top_p=0, temperature=.7, top_k=40):
+def main(model, tokenizer, context, length=40, batch_size=1, top_p=.9, temperature=1.2, top_k=0):
     max_context = 384
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     NL = tokenizer.encode('\n')
