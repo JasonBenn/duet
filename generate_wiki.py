@@ -17,7 +17,7 @@ from pytorch_pretrained_bert import GPT2Tokenizer
 
 def init():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    cache_dir = 'cache/'
+    cache_dir = os.environ.get('PYTORCH_PRETRAINED_BERT_CACHE', 'cache/')
     # Load the best saved model.
     with open(os.path.join(cache_dir, 'model-best.pt'), 'rb') as f:
         sys.path.insert(0,f'{os.getcwd()}/transformer_xl/')
@@ -31,7 +31,7 @@ def init():
     model.eval()
     return model
 
-def main(model, tokenizer, context, length=20, batch_size=1, top_p=.9, temperature=.8, top_k=0):
+def main(model, tokenizer, context, length=40, batch_size=1, top_p=.9, temperature=1.2, top_k=0):
     max_context = 384
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     NL = tokenizer.encode('\n')

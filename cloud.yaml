@@ -1,0 +1,54 @@
+# gcloud config set compute/zone us-west1-b
+# cloud container clusters create duet-gpu --num-nodes=2 --accelerator type=nvidia-tesla-k80,count=1 --image-type=UBUNTU
+# gcloud container clusters get-credentials duet-gpu
+# kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/container-engine-accelerators/master/nvidia-driver-installer/ubuntu/daemonset-preloaded.yaml
+# kubectl apply -f cloud.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: duet
+  labels:
+    app: duet
+  namespace: default
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+  selector:
+    app: duet
+    tier: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: duet
+  labels:
+    app: duet
+spec:
+  template:
+    metadata:
+      labels:
+        app: duet
+        tier: frontend
+    spec:
+      containers:
+      - image: us.gcr.io/duet-0/appengine
+        name: duet
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: duet
+  name: duet
+  namespace: default
+spec:
+  backend:
+    serviceName: duet
+    servicePort: 8080
